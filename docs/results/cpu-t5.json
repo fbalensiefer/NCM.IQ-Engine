@@ -1,0 +1,58 @@
+{
+  "task": "xsum",
+  "model": "google-t5/t5-small",
+  "device": "cpu",
+  "threads": 4,
+  "torch": "2.15.0",
+  "os": "macOS-26.6.2-arm64-arm-64bit",
+  "runs": 12,
+  "warmup": 2,
+  "prompts_sha256": "ca63a6b1276d3226f817f6b3d21dd597e18fc403290d71ca6a0d65c56d7b7a65",
+  "checkpoint_bytes": 242043056,
+  "load_ms": 250.6984170031501,
+  "first_generation_ms": 531.5970410010777,
+  "steady_latency_ms": {
+    "median": 186.85064599412726,
+    "p95": 207.06508299917914
+  },
+  "peak_rss_bytes": 636272640,
+  "requests_per_second": 5.535331412439686,
+  "generation": [
+    {
+      "text": "the library has opened a reading room for children. the room opens on Monday and offers free weekend workshops."
+    },
+    {
+      "text": "the first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. tickets can be bought at the harbor office."
+    },
+    {
+      "text": "researchers measured afternoon conditions at forty stops across three neighborhoods. they found that stops next to mature trees were cooler than stops with a metal roof alone."
+    },
+    {
+      "text": "the library has opened a reading room for children. the room opens on Monday and offers free weekend workshops."
+    },
+    {
+      "text": "the first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. tickets can be bought at the harbor office."
+    },
+    {
+      "text": "researchers measured afternoon conditions at forty stops across three neighborhoods. they found that stops next to mature trees were cooler than stops with a metal roof alone."
+    },
+    {
+      "text": "the library has opened a reading room for children. the room opens on Monday and offers free weekend workshops."
+    },
+    {
+      "text": "the first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. tickets can be bought at the harbor office."
+    },
+    {
+      "text": "researchers measured afternoon conditions at forty stops across three neighborhoods. they found that stops next to mature trees were cooler than stops with a metal roof alone."
+    },
+    {
+      "text": "the library has opened a reading room for children. the room opens on Monday and offers free weekend workshops."
+    },
+    {
+      "text": "the first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. tickets can be bought at the harbor office."
+    },
+    {
+      "text": "researchers measured afternoon conditions at forty stops across three neighborhoods. they found that stops next to mature trees were cooler than stops with a metal roof alone."
+    }
+  ]
+}

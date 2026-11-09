@@ -1,0 +1,268 @@
+{
+  "device": "cpu",
+  "profile": "quality",
+  "task": "xsum",
+  "python": "3.12.16",
+  "os": "macOS-26.6.2-arm64-arm-64bit",
+  "torch": "2.15.0",
+  "threads": 4,
+  "seed": 2026,
+  "warmup": 2,
+  "runs": 12,
+  "prompts_sha256": "ca63a6b1276d3226f817f6b3d21dd597e18fc403290d71ca6a0d65c56d7b7a65",
+  "checkpoint_bytes": 653981290,
+  "load_ms": 1192.0008750021225,
+  "first_generation_ms": 1641.6325830068672,
+  "load_and_first_ms": 2833.7932499998715,
+  "steady_latency_ms": {
+    "median": 1586.197999997239,
+    "p95": 1620.0364579999587
+  },
+  "requests_per_second": 0.6278670223493094,
+  "steady_peak_rss_bytes": 1467088896,
+  "peak_rss_bytes": 1468465152,
+  "generation_stage_ms": {
+    "concept_generation": {
+      "median": 1569.0610829988145,
+      "p95": 1602.5722079939442
+    },
+    "concept_sampling": {
+      "median": 15.627582011802588,
+      "p95": 15.990666957804933
+    },
+    "decoder_selection": {
+      "median": 10.080229003506247,
+      "p95": 10.490709013538435
+    },
+    "input_embedding": {
+      "median": 0.04754149995278567,
+      "p95": 0.09387500176671892
+    },
+    "input_transfer": {
+      "median": 0.001812506525311619,
+      "p95": 0.0021669984562322497
+    },
+    "neural_decoder": {
+      "median": 5.395833504735492,
+      "p95": 5.6067080004140735
+    },
+    "output_transfer": {
+      "median": 0.012437500117812306,
+      "p95": 0.020749997929669917
+    },
+    "preprocessing": {
+      "median": 0.24720849614823237,
+      "p95": 0.392707996070385
+    },
+    "rvq_generation": {
+      "median": 3.0591050017392263,
+      "p95": 3.1793349771760404
+    },
+    "rvq_reconstruction": {
+      "median": 2.7721459991880693,
+      "p95": 3.1842089956626296
+    },
+    "text_reconstruction": {
+      "median": 0.06724999548168853,
+      "p95": 0.07591700705233961
+    },
+    "total": {
+      "median": 1588.0335204928997,
+      "p95": 1621.1832910048543
+    },
+    "transformer_level_0": {
+      "median": 165.909396004281,
+      "p95": 168.10304200043902
+    },
+    "transformer_level_1": {
+      "median": 168.45912500139093,
+      "p95": 171.0838330036495
+    },
+    "transformer_level_2": {
+      "median": 166.8132494960446,
+      "p95": 172.0530000020517
+    },
+    "transformer_level_3": {
+      "median": 168.5391874925699,
+      "p95": 198.84300000558142
+    },
+    "transformer_level_4": {
+      "median": 169.18258299847366,
+      "p95": 174.34987500018906
+    },
+    "transformer_level_5": {
+      "median": 170.5852915038122,
+      "p95": 197.61162500071805
+    },
+    "transformer_level_6": {
+      "median": 172.40399999718647,
+      "p95": 174.18329200882
+    },
+    "transformer_level_7": {
+      "median": 178.7168750015553,
+      "p95": 182.40487499861047
+    },
+    "transformer_level_8": {
+      "median": 180.58622899843613,
+      "p95": 185.20175000594463
+    },
+    "transformer": {
+      "median": 1540.650478520547,
+      "p95": 1574.3895820050966
+    }
+  },
+  "reconstruction_stage_ms": {
+    "input_transfer": {
+      "median": 0.013917000615037978,
+      "p95": 0.017041005776263773
+    },
+    "neural_decoder": {
+      "median": 5.831167007272597,
+      "p95": 6.371374998707324
+    },
+    "neural_encoder": {
+      "median": 0.1267709958483465,
+      "p95": 0.1617499947315082
+    },
+    "rvq_reconstruction": {
+      "median": 2.2112915030447766,
+      "p95": 2.413624999462627
+    },
+    "rvq_search": {
+      "median": 10.186813000473194,
+      "p95": 10.714666990679689
+    },
+    "text_reconstruction": {
+      "median": 0.07741649460513145,
+      "p95": 0.08962499850895256
+    },
+    "total": {
+      "median": 18.81037500425009,
+      "p95": 19.46804200997576
+    }
+  },
+  "generation": [
+    {
+      "concept_sha256": "fab49fe4fc4bd995c06889ce3074a4e43c5f0eeab05ca330e5fb70a9b2163d02",
+      "token_sha256": "9d1c1a989fc31f031cbb4760f08d12ee968182b4f3ef7e3f9519315d74c4d2ca",
+      "text": "A \u00a36.6m revamp of revamp city's \u00a32.2m revamp of the city centre."
+    },
+    {
+      "concept_sha256": "eb8852a513c104e65bb5df340904c78e2bafd25e825842d224e12375df37626f",
+      "token_sha256": "8ae54c3122eafa99146fe677b111e8361813464d8183b6901a19007514f6d07f",
+      "text": "Two trains have been officially opened at the empty derelictlict pier in Colchester."
+    },
+    {
+      "concept_sha256": "d779ff33bdc2e95230857c571a488dfa486339f017832fcda4a17bb81fb91e12",
+      "token_sha256": "dc37b8265b05e986befe39d3254f128c4922954ec7393eb91d7f7d8ccede0206",
+      "text": "Researchers at the University of Michigan from California, University are playing university experiments - compare soaring temperatures above the below above freezing temperatures."
+    },
+    {
+      "concept_sha256": "fab49fe4fc4bd995c06889ce3074a4e43c5f0eeab05ca330e5fb70a9b2163d02",
+      "token_sha256": "9d1c1a989fc31f031cbb4760f08d12ee968182b4f3ef7e3f9519315d74c4d2ca",
+      "text": "A \u00a36.6m revamp of revamp city's \u00a32.2m revamp of the city centre."
+    },
+    {
+      "concept_sha256": "eb8852a513c104e65bb5df340904c78e2bafd25e825842d224e12375df37626f",
+      "token_sha256": "8ae54c3122eafa99146fe677b111e8361813464d8183b6901a19007514f6d07f",
+      "text": "Two trains have been officially opened at the empty derelictlict pier in Colchester."
+    },
+    {
+      "concept_sha256": "d779ff33bdc2e95230857c571a488dfa486339f017832fcda4a17bb81fb91e12",
+      "token_sha256": "dc37b8265b05e986befe39d3254f128c4922954ec7393eb91d7f7d8ccede0206",
+      "text": "Researchers at the University of Michigan from California, University are playing university experiments - compare soaring temperatures above the below above freezing temperatures."
+    },
+    {
+      "concept_sha256": "fab49fe4fc4bd995c06889ce3074a4e43c5f0eeab05ca330e5fb70a9b2163d02",
+      "token_sha256": "9d1c1a989fc31f031cbb4760f08d12ee968182b4f3ef7e3f9519315d74c4d2ca",
+      "text": "A \u00a36.6m revamp of revamp city's \u00a32.2m revamp of the city centre."
+    },
+    {
+      "concept_sha256": "eb8852a513c104e65bb5df340904c78e2bafd25e825842d224e12375df37626f",
+      "token_sha256": "8ae54c3122eafa99146fe677b111e8361813464d8183b6901a19007514f6d07f",
+      "text": "Two trains have been officially opened at the empty derelictlict pier in Colchester."
+    },
+    {
+      "concept_sha256": "d779ff33bdc2e95230857c571a488dfa486339f017832fcda4a17bb81fb91e12",
+      "token_sha256": "dc37b8265b05e986befe39d3254f128c4922954ec7393eb91d7f7d8ccede0206",
+      "text": "Researchers at the University of Michigan from California, University are playing university experiments - compare soaring temperatures above the below above freezing temperatures."
+    },
+    {
+      "concept_sha256": "fab49fe4fc4bd995c06889ce3074a4e43c5f0eeab05ca330e5fb70a9b2163d02",
+      "token_sha256": "9d1c1a989fc31f031cbb4760f08d12ee968182b4f3ef7e3f9519315d74c4d2ca",
+      "text": "A \u00a36.6m revamp of revamp city's \u00a32.2m revamp of the city centre."
+    },
+    {
+      "concept_sha256": "eb8852a513c104e65bb5df340904c78e2bafd25e825842d224e12375df37626f",
+      "token_sha256": "8ae54c3122eafa99146fe677b111e8361813464d8183b6901a19007514f6d07f",
+      "text": "Two trains have been officially opened at the empty derelictlict pier in Colchester."
+    },
+    {
+      "concept_sha256": "d779ff33bdc2e95230857c571a488dfa486339f017832fcda4a17bb81fb91e12",
+      "token_sha256": "dc37b8265b05e986befe39d3254f128c4922954ec7393eb91d7f7d8ccede0206",
+      "text": "Researchers at the University of Michigan from California, University are playing university experiments - compare soaring temperatures above the below above freezing temperatures."
+    }
+  ],
+  "reconstruction": [
+    {
+      "concept_sha256": "3fb2010dd083b67bbc4aeb6ac16c6bad7af5301bc2c0937076f6e943f2362057",
+      "token_sha256": "7dec2bd35ba10803d258af495ab9b755535ce9747a7ea6fc4dc09b890b8d06f3",
+      "text": "The city library has opened a new reading room for children after a six month renovation. The room opens on Monday and offers free weekend workshops."
+    },
+    {
+      "concept_sha256": "b76a0a2325260323197b369e50d10017879987d7dbd861ee4fd21e446fe3845a",
+      "token_sha256": "8298cfd9b657530228d2807b560502d52723cc8c9e1c566f8c3cee630cbd3bb8",
+      "text": "A volunteer-run ferry service will restart on Saturday after repairs to the main pier. The first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. Tickets can be bought at thegirls office. The pier was"
+    },
+    {
+      "concept_sha256": "102b976b591b3f80ec17dc5d19b5e85cf70e85e61eddaafb53c489c9a8137cae",
+      "token_sha256": "c2d37614c928b94ce51d4ae714a597cf7174ca9014ebc5bc871e4f304de62d4c",
+      "text": "A research team at a university has tested whether planting trees near bus stops can lower summertime temperatures for passengers. During the experiment, the researchers measured afternoon conditions at forty stops across three Researchers. They found that stops next to mature trees were"
+    },
+    {
+      "concept_sha256": "3fb2010dd083b67bbc4aeb6ac16c6bad7af5301bc2c0937076f6e943f2362057",
+      "token_sha256": "7dec2bd35ba10803d258af495ab9b755535ce9747a7ea6fc4dc09b890b8d06f3",
+      "text": "The city library has opened a new reading room for children after a six month renovation. The room opens on Monday and offers free weekend workshops."
+    },
+    {
+      "concept_sha256": "b76a0a2325260323197b369e50d10017879987d7dbd861ee4fd21e446fe3845a",
+      "token_sha256": "8298cfd9b657530228d2807b560502d52723cc8c9e1c566f8c3cee630cbd3bb8",
+      "text": "A volunteer-run ferry service will restart on Saturday after repairs to the main pier. The first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. Tickets can be bought at thegirls office. The pier was"
+    },
+    {
+      "concept_sha256": "102b976b591b3f80ec17dc5d19b5e85cf70e85e61eddaafb53c489c9a8137cae",
+      "token_sha256": "c2d37614c928b94ce51d4ae714a597cf7174ca9014ebc5bc871e4f304de62d4c",
+      "text": "A research team at a university has tested whether planting trees near bus stops can lower summertime temperatures for passengers. During the experiment, the researchers measured afternoon conditions at forty stops across three Researchers. They found that stops next to mature trees were"
+    },
+    {
+      "concept_sha256": "3fb2010dd083b67bbc4aeb6ac16c6bad7af5301bc2c0937076f6e943f2362057",
+      "token_sha256": "7dec2bd35ba10803d258af495ab9b755535ce9747a7ea6fc4dc09b890b8d06f3",
+      "text": "The city library has opened a new reading room for children after a six month renovation. The room opens on Monday and offers free weekend workshops."
+    },
+    {
+      "concept_sha256": "b76a0a2325260323197b369e50d10017879987d7dbd861ee4fd21e446fe3845a",
+      "token_sha256": "8298cfd9b657530228d2807b560502d52723cc8c9e1c566f8c3cee630cbd3bb8",
+      "text": "A volunteer-run ferry service will restart on Saturday after repairs to the main pier. The first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. Tickets can be bought at thegirls office. The pier was"
+    },
+    {
+      "concept_sha256": "102b976b591b3f80ec17dc5d19b5e85cf70e85e61eddaafb53c489c9a8137cae",
+      "token_sha256": "c2d37614c928b94ce51d4ae714a597cf7174ca9014ebc5bc871e4f304de62d4c",
+      "text": "A research team at a university has tested whether planting trees near bus stops can lower summertime temperatures for passengers. During the experiment, the researchers measured afternoon conditions at forty stops across three Researchers. They found that stops next to mature trees were"
+    },
+    {
+      "concept_sha256": "3fb2010dd083b67bbc4aeb6ac16c6bad7af5301bc2c0937076f6e943f2362057",
+      "token_sha256": "7dec2bd35ba10803d258af495ab9b755535ce9747a7ea6fc4dc09b890b8d06f3",
+      "text": "The city library has opened a new reading room for children after a six month renovation. The room opens on Monday and offers free weekend workshops."
+    },
+    {
+      "concept_sha256": "b76a0a2325260323197b369e50d10017879987d7dbd861ee4fd21e446fe3845a",
+      "token_sha256": "8298cfd9b657530228d2807b560502d52723cc8c9e1c566f8c3cee630cbd3bb8",
+      "text": "A volunteer-run ferry service will restart on Saturday after repairs to the main pier. The first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. Tickets can be bought at thegirls office. The pier was"
+    },
+    {
+      "concept_sha256": "102b976b591b3f80ec17dc5d19b5e85cf70e85e61eddaafb53c489c9a8137cae",
+      "token_sha256": "c2d37614c928b94ce51d4ae714a597cf7174ca9014ebc5bc871e4f304de62d4c",
+      "text": "A research team at a university has tested whether planting trees near bus stops can lower summertime temperatures for passengers. During the experiment, the researchers measured afternoon conditions at forty stops across three Researchers. They found that stops next to mature trees were"
+    }
+  ]
+}
