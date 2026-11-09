@@ -20,7 +20,9 @@ XSum uses a 12-layer, 12-head, 768-wide generator. Its nine scales expand from f
 
 The trained VQ-VAE preserves the released 384-dimensional codebooks, learned coarse sampling, residual convolutions, and parallel vocabulary projection. Source generation uses a raw embedding in XSum. The complete encoder and nearest-neighbor search run for dialogue supervision and the reconstruction benchmark. The text vocabulary is the text interface to that neural tokenizer.
 
-The app owns a single loaded model per process and replaces it on a model, device or profile change. A request copies current session history, runs generation, and commits both messages only if the SQLite revision is unchanged. Concurrent sends or resets return a conflict. The UI displays synchronized stage measurements for the last successful request. Generation produces the complete response in one API response.
+Balanced combines prefix evaluation with the first concept scale and retains the source K/V for later scales. CPU Ultra-light uses separate passes because dynamic INT8 chooses an activation scale for each input.
+
+The app owns a single loaded model per process and replaces it on a model, device or profile change. A request copies current session history, runs generation, and commits both messages only if the SQLite revision is unchanged. Concurrent sends or resets return a conflict. The UI displays total inference latency and offers synchronized stage measurements as an opt-in. Generation produces the complete response in one API response.
 
 ## Rust runtime
 

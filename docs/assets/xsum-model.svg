@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="472" viewBox="0 0 1200 472" role="img" aria-labelledby="title description">
+  <title id="title">NCM.IQ XSum model at a glance</title>
+  <desc id="description">Text enters as at most 512 vocabulary tokens. A 12-layer Transformer samples nine successive concept scales with 4, 6, 10, 14, 20, 26, 32, 40 and 48 positions. All positions within each scale are sampled in parallel. The neural decoder reads the accumulated RVQ latent and predicts up to 48 text positions.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#172b34"/><stop offset="1" stop-color="#10151b"/>
+    </linearGradient>
+    <linearGradient id="bars" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+      <stop stop-color="#316358"/><stop offset="1" stop-color="#86efc5"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <path d="M0 0 6 3.5 0 7" fill="none" stroke="#86efc5" stroke-width="1.2"/>
+    </marker>
+    <style>
+      text{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#f1f5f9}
+      .eyebrow{font:700 14px ui-monospace,monospace;letter-spacing:2px;fill:#86efc5}
+      .muted{fill:#b6c9d8;font-size:17px}
+      .number{font-size:47px;font-weight:750;fill:#86efc5}
+      .label{font-size:20px;font-weight:700}
+      .count{font:700 17px ui-monospace,monospace;fill:#e3f6ee}
+    </style>
+  </defs>
+  <rect x="1" y="1" width="1198" height="470" rx="24" fill="url(#background)" stroke="#314650"/>
+  <path d="M62 38l14 14-14 14-14-14zM62 44l8 8-8 8-8-8z" fill="none" stroke="#86efc5" stroke-width="2"/>
+  <text x="92" y="57" class="eyebrow">NCM.IQ / OFFICIAL XSUM CHECKPOINT</text>
+  <text x="48" y="112" font-size="43" font-weight="750">From text to concept scales</text>
+
+  <g fill="#17212a" stroke="#334653">
+    <rect x="48" y="145" width="217" height="242" rx="16"/>
+    <rect x="294" y="145" width="612" height="242" rx="16"/>
+    <rect x="935" y="145" width="217" height="242" rx="16"/>
+  </g>
+  <g stroke="#86efc5" stroke-width="2" marker-end="url(#arrow)">
+    <path d="M270 265h17"/><path d="M911 265h17"/>
+  </g>
+
+  <text x="68" y="178" class="eyebrow">01 / CONDITION</text>
+  <text x="68" y="247" class="number">512</text>
+  <text x="68" y="278" class="label">input tokens max.</text>
+  <text x="68" y="320" class="muted">Vocabulary IDs</text>
+  <text x="68" y="344" class="muted">→ source embedding</text>
+
+  <text x="321" y="178" class="eyebrow">02 / GENERATE</text>
+  <text x="321" y="208" class="label">Nine scales, coarse to fine</text>
+  <text x="321" y="233" class="muted">Positions within each scale are sampled in parallel.</text>
+  <path d="M321 340h559" stroke="#425765"/>
+  <g fill="url(#bars)">
+    <rect x="333" y="332" width="33" height="8" rx="4"/>
+    <rect x="394" y="328" width="33" height="12" rx="4"/>
+    <rect x="455" y="320" width="33" height="20" rx="4"/>
+    <rect x="516" y="312" width="33" height="28" rx="4"/>
+    <rect x="577" y="300" width="33" height="40" rx="4"/>
+    <rect x="638" y="288" width="33" height="52" rx="4"/>
+    <rect x="699" y="276" width="33" height="64" rx="4"/>
+    <rect x="760" y="260" width="33" height="80" rx="4"/>
+    <rect x="821" y="244" width="33" height="96" rx="4"/>
+  </g>
+  <g class="count" text-anchor="middle">
+    <text x="349" y="366">4</text><text x="410" y="366">6</text><text x="471" y="366">10</text>
+    <text x="532" y="366">14</text><text x="593" y="366">20</text><text x="654" y="366">26</text>
+    <text x="715" y="366">32</text><text x="776" y="366">40</text><text x="837" y="366">48</text>
+  </g>
+
+  <text x="955" y="178" class="eyebrow">03 / DECODE</text>
+  <text x="955" y="247" class="number">48</text>
+  <text x="955" y="278" class="label">output positions</text>
+  <text x="955" y="320" class="muted">Accumulated latent</text>
+  <text x="955" y="344" class="muted">→ neural decoder</text>
+
+  <path d="M48 413h1104" stroke="#354b56"/>
+  <g class="muted">
+    <text x="48" y="444">12 Transformer layers</text>
+    <text x="312" y="444">12 attention heads</text>
+    <text x="560" y="444">768 hidden dimensions</text>
+    <text x="850" y="444">4,096 code IDs per scale</text>
+  </g>
+</svg>

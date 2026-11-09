@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="513" viewBox="0 0 1200 513" role="img" aria-labelledby="title description">
+  <title id="title">NCM.IQ local setup and request path</title>
+  <desc id="description">Build the Rust executable with LibTorch 2.13, download and verify the XSum and vocabulary artifacts, then serve the app on loopback. The browser exchanges JSON with Axum. The Rust engine loads the model artifacts from disk and runs tensor operations on CPU, MPS or CUDA if available. SQLite stores sessions locally.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#172b34"/><stop offset="1" stop-color="#10151b"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto-start-reverse">
+      <path d="M0 0 6 3.5 0 7" fill="none" stroke="#86efc5" stroke-width="1.2"/>
+    </marker>
+    <style>
+      text{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#f1f5f9}
+      .eyebrow{font:700 14px ui-monospace,monospace;letter-spacing:2px;fill:#86efc5}
+      .label{font-size:22px;font-weight:700}
+      .muted{fill:#b6c9d8;font-size:17px}
+      .code{fill:#bff2dd;font:600 16px ui-monospace,monospace}
+    </style>
+  </defs>
+  <rect x="1" y="1" width="1198" height="511" rx="24" fill="url(#background)" stroke="#314650"/>
+  <text x="48" y="53" class="eyebrow">NCM.IQ / LOCAL SETUP</text>
+  <text x="48" y="104" font-size="43" font-weight="750">Build once, run locally</text>
+
+  <g fill="#17212a" stroke="#334653">
+    <rect x="48" y="130" width="344" height="123" rx="14"/>
+    <rect x="428" y="130" width="344" height="123" rx="14"/>
+    <rect x="808" y="130" width="344" height="123" rx="14"/>
+  </g>
+  <g stroke="#86efc5" stroke-width="2" marker-end="url(#arrow)">
+    <path d="M400 190h20"/><path d="M780 190h20"/>
+  </g>
+  <g>
+    <text x="68" y="159" class="eyebrow">01 / BUILD</text>
+    <text x="68" y="197" class="code">cargo build --release --locked</text>
+    <text x="68" y="227" class="muted">Rust + native LibTorch 2.13 SDK</text>
+    <text x="448" y="159" class="eyebrow">02 / DOWNLOAD</text>
+    <text x="448" y="197" class="code">target/release/ncm-iq download</text>
+    <text x="448" y="227" class="muted">Verified weights, config and vocabulary</text>
+    <text x="828" y="159" class="eyebrow">03 / START</text>
+    <text x="828" y="197" class="code">target/release/ncm-iq serve</text>
+    <text x="828" y="227" class="muted">Open 127.0.0.1:8000 in a browser</text>
+  </g>
+
+  <text x="48" y="293" class="eyebrow">OFFLINE REQUEST PATH</text>
+  <g fill="#17212a" stroke="#334653">
+    <rect x="48" y="313" width="240" height="93" rx="14"/>
+    <rect x="336" y="313" width="240" height="93" rx="14"/>
+    <rect x="624" y="313" width="240" height="93" rx="14"/>
+    <rect x="912" y="313" width="240" height="93" rx="14"/>
+  </g>
+  <g stroke="#86efc5" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)">
+    <path d="M297 359h30"/><path d="M585 359h30"/><path d="M873 359h30"/>
+  </g>
+  <g>
+    <text x="68" y="350" class="label">Browser</text>
+    <text x="68" y="379" class="muted">Embedded chat interface</text>
+    <text x="356" y="350" class="label">Axum API</text>
+    <text x="356" y="379" class="muted">Loopback HTTP + JSON</text>
+    <text x="644" y="350" class="label">Rust engine</text>
+    <text x="644" y="379" class="muted">NCM generator + VQ-VAE</text>
+    <text x="932" y="350" class="label">LibTorch</text>
+    <text x="932" y="379" class="muted">CPU · MPS · optional CUDA</text>
+  </g>
+  <g stroke="#638791" fill="none" stroke-width="1.5" stroke-dasharray="4 4">
+    <path d="M456 406v21"/><path d="M744 406v21"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="456" y="451" class="code">sessions/chat.sqlite3</text>
+    <text x="456" y="477" class="muted">Saved conversations</text>
+    <text x="744" y="451" class="code">artifacts/</text>
+    <text x="744" y="477" class="muted">Local model files</text>
+  </g>
+</svg>
