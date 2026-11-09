@@ -1,7 +1,7 @@
 use anyhow::Result;
 use tch::{Device, Kind, Tensor};
 
-use crate::{int8::Int8, weights::Weights};
+use crate::{device::Timings, int8::Int8, weights::Weights};
 
 pub struct Linear {
     weight: Tensor,
@@ -142,6 +142,15 @@ pub struct Kv {
     v: Tensor,
 }
 
+impl Kv {
+    pub fn prefix(self, width: i64) -> Self {
+        Self {
+            k: self.k.narrow(2, 0, width),
+            v: self.v.narrow(2, 0, width),
+        }
+    }
+}
+
 pub struct Block {
     norm_attn: Norm,
     norm_mlp: Norm,
@@ -188,40 +197,58 @@ impl Block {
         rope: Option<&Rope>,
         prefix: Option<&Kv>,
         dropout: f64,
+        mut timing: Option<&mut Timings>,
     ) -> (Tensor, Kv) {
         let shape = x.size();
         let (batch, length, width) = (shape[0], shape[1], shape[2]);
-        let qkv = self
-            .qkv
-            .forward(&self.norm_attn.forward(x))
-            .split(width, -1);
+        let normalized = Timings::block_stage(&mut timing, "block_normalization", || {
+            self.norm_attn.forward(x)
+        });
+        let qkv = Timings::block_stage(&mut timing, "block_linear", || {
+            self.qkv.forward(&normalized)
+        })
+        .split(width, -1);
         let heads = |x: &Tensor| {
             x.view([batch, length, self.heads, width / self.heads])
                 .transpose(1, 2)
         };
-        let mut q = rms(&heads(&qkv[0]), &self.q_norm);
-        let mut k = rms(&heads(&qkv[1]), &self.k_norm);
+        let rotate = |x: Tensor| match rope {
+            Some(rope) => rope.apply(&x),
+            None => x,
+        };
+        let (q, mut k) = Timings::block_stage(&mut timing, "block_qk_norm_rope", || {
+            (
+                rotate(rms(&heads(&qkv[0]), &self.q_norm)),
+                rotate(rms(&heads(&qkv[1]), &self.k_norm)),
+            )
+        });
         let mut v = heads(&qkv[2]);
-        if let Some(rope) = rope {
-            q = rope.apply(&q);
-            k = rope.apply(&k);
-        }
         if let Some(prefix) = prefix {
-            k = Tensor::cat(&[&prefix.k, &k], 2);
-            v = Tensor::cat(&[&prefix.v, &v], 2);
+            (k, v) = Timings::block_stage(&mut timing, "block_kv_copy", || {
+                (
+                    Tensor::cat(&[&prefix.k, &k], 2),
+                    Tensor::cat(&[&prefix.v, &v], 2),
+                )
+            });
         }
-        let attended =
+        let attended = Timings::block_stage(&mut timing, "block_attention", || {
             Tensor::scaled_dot_product_attention(&q, &k, &v, mask, dropout, false, None, false)
                 .transpose(1, 2)
                 .contiguous()
-                .view([batch, length, width]);
-        let x = x + self
-            .attention_out
-            .forward(&attended)
-            .dropout(dropout, dropout > 0.);
-        let mlp = self
-            .down
-            .forward(&self.up.forward(&self.norm_mlp.forward(&x)).gelu("none"));
+                .view([batch, length, width])
+        });
+        let projected = Timings::block_stage(&mut timing, "block_linear", || {
+            self.attention_out.forward(&attended)
+        });
+        let x = x + projected.dropout(dropout, dropout > 0.);
+        let normalized = Timings::block_stage(&mut timing, "block_normalization", || {
+            self.norm_mlp.forward(&x)
+        });
+        let up = Timings::block_stage(&mut timing, "block_linear", || self.up.forward(&normalized));
+        let activated = Timings::block_stage(&mut timing, "block_activation", || up.gelu("none"));
+        let mlp = Timings::block_stage(&mut timing, "block_linear", || {
+            self.down.forward(&activated)
+        });
         (x + mlp.dropout(dropout, dropout > 0.), Kv { k, v })
     }
 }

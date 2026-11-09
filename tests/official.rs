@@ -28,6 +28,14 @@ fn official_xsum_cpu_and_mps() -> Result<()> {
         for (i, prompt) in prompts.iter().enumerate() {
             let generated =
                 engine.generate(prompt, engine.config.generation.sampling, None, true)?;
+            if i == 0 {
+                let fast =
+                    engine.generate(prompt, engine.config.generation.sampling, None, false)?;
+                assert_eq!(fast.concept_codes, generated.concept_codes);
+                assert_eq!(fast.token_ids, generated.token_ids);
+                assert_eq!(fast.stats.milliseconds.len(), 1);
+                assert!(fast.stats.milliseconds["total"] > 0.);
+            }
             let reconstructed = engine.reconstruct(prompt, true)?;
             for (kind, result) in [("generation", generated), ("reconstruction", reconstructed)] {
                 assert_eq!(result.concept_codes.len(), 200);

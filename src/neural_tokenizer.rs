@@ -182,7 +182,7 @@ impl NeuralTokenizer {
     }
 
     pub fn decode(&self, latent: &Tensor) -> Tensor {
-        let (hidden, _) = self.decoder.forward(latent, None, None, None, 0.);
+        let (hidden, _) = self.decoder.forward(latent, None, None, None, 0., None);
         self.projection.forward(&self.decoder_norm.forward(&hidden))
     }
 }

@@ -127,6 +127,16 @@ impl Engine {
         context: Option<usize>,
         detailed: bool,
     ) -> Result<Output> {
+        self.generate_timed(text, sampling, context, Timings::new(self.device, detailed))
+    }
+
+    pub(crate) fn generate_timed(
+        &self,
+        text: &str,
+        sampling: Sampling,
+        context: Option<usize>,
+        mut timing: Timings,
+    ) -> Result<Output> {
         let start = Instant::now();
         let max = self.config.model.prefix_len as usize;
         let limit = context.unwrap_or(max);
@@ -135,7 +145,6 @@ impl Engine {
             "context limit must be between 1 and {max}"
         );
         sampling.validate(&self.config.model.vocab_size)?;
-        let mut timing = Timings::new(self.device, detailed);
         let (text, codes, tokens) = no_grad(|| {
             let ids = timing.stage("preprocessing", |_| {
                 self.vocabulary

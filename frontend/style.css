@@ -18,6 +18,8 @@ aside{display:grid;align-content:start;gap:15px}
 label{display:block;font-size:.83rem;color:var(--muted);margin-bottom:10px}
 select,input,textarea,button{font:inherit}
 select,input,textarea{display:block;width:100%;min-width:0;background:var(--base);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:8px;margin-top:4px}
+.profiling-toggle{display:flex;align-items:center;gap:7px}
+.profiling-toggle input{width:auto;margin:0}
 textarea{resize:vertical;margin:0}
 button{border:1px solid transparent;border-radius:7px;padding:7px 12px;background:var(--mint);color:#102a24;font-weight:700;cursor:pointer}
 button.secondary{color:var(--ink);background:var(--soft);border-color:var(--line);font-size:.82rem}

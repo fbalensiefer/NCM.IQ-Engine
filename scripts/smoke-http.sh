@@ -32,7 +32,7 @@ for color in teal purple orange; do
   session=$(post /api/sessions "$(jq -nc --arg model "$model" '{model:$model}')")
   api="/api/sessions/$(jq -r '.id' <<< "$session")"
   first=$(post "$api/messages" "$(jq -nc --arg color "$color" '{text:("Remember this badge color: " + $color + "."),revision:0,backend:"cpu"}')")
-  jq -e '.session.revision == 1 and .stats.milliseconds.total > 0' <<< "$first" >/dev/null
+  jq -e '.session.revision == 1 and .stats.milliseconds.total > 0 and (.stats.milliseconds | keys) == ["total"]' <<< "$first" >/dev/null
   second=$(post "$api/messages" '{"text":"What badge color did I give you?","revision":1,"backend":"cpu"}')
   jq -e '.session.revision == 2 and (.session.turns | length) == 2' <<< "$second" >/dev/null
   expected=$(jq -c '.session' <<< "$second")
@@ -46,5 +46,5 @@ done
 
 session=$(post /api/sessions '{"model":"xsum"}')
 api="/api/sessions/$(jq -r '.id' <<< "$session")"
-post "$api/messages" '{"text":"The library is opening a new reading room for children on Monday after six months of renovation.","revision":0,"backend":"auto"}' |
+post "$api/messages" '{"text":"The library is opening a new reading room for children on Monday after six months of renovation.","revision":0,"backend":"auto","profile_timings":true}' |
   jq -e '.stats.milliseconds.neural_decoder > 0 and (.session.turns[0].assistant | length) > 0' >/dev/null

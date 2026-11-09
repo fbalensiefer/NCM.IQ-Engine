@@ -24,6 +24,26 @@ Balanced matched Quality's concept and text-token arrays on all 12 generation an
 
 MPS Ultra-light matched the measured arrays and reduced median decoder forward time from 4.50 to 3.91 ms versus Balanced. CPU Ultra-light changed every measured generation array and matched four of 12 reconstructed token arrays. Its QNNPACK kernel also emitted a reduce-range warning. The workload covers a small set of prompts. Dialogue evaluation is separate. [Dialogue smoke results](dialogue.md)
 
+## Combined prefix and first scale
+
+The measurements above are the original release baseline. In a follow-up on the same M2, Balanced combined the prefix and the first concept scale in one Transformer pass. Each variant used four threads, six warm-up requests, and 18 measured requests cycling through the same three prompts.
+
+| Backend | Separate passes median | Combined pass median | Separate passes P95 | Combined pass P95 |
+|---|---:|---:|---:|---:|
+| CPU | 260.5 ms | 237.5 ms | 303.5 ms | 276.2 ms |
+| MPS | 132.0 ms | 117.3 ms | 154.3 ms | 138.8 ms |
+
+All 18 generation and reconstruction concept and token arrays matched per backend.
+
+## Web profiling
+
+On the optimized MPS build, 30 pairs of Balanced XSum requests produced identical response text. The loopback benchmark used one warmed server, three prompts, deterministic sampling, and alternated which mode ran first within each pair.
+
+| HTTP mode | Median | P95 |
+|---|---:|---:|
+| Default, total latency only | 122.4 ms | 138.9 ms |
+| Synchronized stage profiling | 170.4 ms | 194.2 ms |
+
 ## Reproduce
 
 Run from the repository root after building the release binary and downloading the official artifacts. Use `cpu` or `mps` as the backend. The comparison command checks common benchmark settings and reports stage speedups and output-hash parity.
@@ -36,3 +56,7 @@ for profile in quality balanced ultra; do
 done
 target/release/ncm-iq compare "results/$backend-quality.json" "results/$backend-balanced.json"
 ```
+
+Add `--transformer-breakdown` to collect synchronized timings inside the Transformer blocks during the diagnostic pass. The report lists `block_linear`, `block_attention`, `block_kv_copy`, and the normalization, RoPE, and activation stages. These measurements include synchronization costs and overlap the per-scale Transformer timers. Use `steady_latency_ms` to compare overall inference latency.
+
+For HTTP comparisons, warm up a single server and alternate otherwise identical message requests with `profile_timings` set to `false` and `true`. Compare end-to-end request time separately from `stats.milliseconds.total`, which measures inference inside the server. [Local API](api.md)

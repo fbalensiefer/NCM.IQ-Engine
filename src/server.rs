@@ -91,6 +91,8 @@ struct Message {
     backend: Backend,
     #[serde(default)]
     profile: Profile,
+    #[serde(default)]
+    profile_timings: bool,
     context_limit: Option<usize>,
     history_turns: Option<usize>,
     temperature: Option<f64>,
@@ -178,7 +180,12 @@ impl App {
                 .validate(&engine.config.model.vocab_size)
                 .map_err(|e| ApiError::invalid(e.to_string()))?;
             engine
-                .generate(&prompt, sampling, request.context_limit, true)
+                .generate(
+                    &prompt,
+                    sampling,
+                    request.context_limit,
+                    request.profile_timings,
+                )
                 .map_err(ApiError::internal)?
         };
         let mut turns = session.turns.clone();

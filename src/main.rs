@@ -55,6 +55,9 @@ enum Command {
         runs: usize,
         #[arg(long, default_value_t = 2026)]
         seed: i64,
+        /// Collect synchronized timings inside the Transformer blocks during the diagnostic pass.
+        #[arg(long)]
+        transformer_breakdown: bool,
         #[arg(long)]
         output: PathBuf,
     },
@@ -133,13 +136,22 @@ async fn main() -> Result<()> {
             warmup,
             runs,
             seed,
+            transformer_breakdown,
             output,
         } => {
             let prompts = prompts
                 .map(fs::read)
                 .transpose()?
                 .unwrap_or_else(|| benchmark::PROMPTS.as_bytes().to_vec());
-            let report = benchmark::run(&model.load()?, &prompts, warmup, runs, seed, cli.threads)?;
+            let report = benchmark::run(
+                &model.load()?,
+                &prompts,
+                warmup,
+                runs,
+                seed,
+                cli.threads,
+                transformer_breakdown,
+            )?;
             if let Some(dir) = output.parent().filter(|p| !p.as_os_str().is_empty()) {
                 fs::create_dir_all(dir)?;
             }

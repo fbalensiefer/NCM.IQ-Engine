@@ -99,6 +99,7 @@ impl Generator {
         rope: &Rope,
         cache: Option<&[Kv]>,
         dropout: f64,
+        mut timing: Option<&mut Timings>,
     ) -> Tensor {
         let mut x = x.shallow_clone();
         for (i, block) in self.blocks.iter().enumerate() {
@@ -109,10 +110,28 @@ impl Generator {
                     Some(rope),
                     cache.map(|cache| &cache[i]),
                     dropout,
+                    timing.as_deref_mut(),
                 )
                 .0;
         }
         x
+    }
+
+    fn prefill(
+        &self,
+        mut hidden: Tensor,
+        mask: &Tensor,
+        rope: &Rope,
+        prefix_width: i64,
+        timing: &mut Timings,
+    ) -> (Tensor, Vec<Kv>) {
+        let mut cache = Vec::with_capacity(self.blocks.len());
+        for block in &self.blocks {
+            let (next, kv) = block.forward(&hidden, Some(mask), Some(rope), None, 0., Some(timing));
+            hidden = next;
+            cache.push(kv.prefix(prefix_width));
+        }
+        (hidden, cache)
     }
 
     pub fn infer(
@@ -129,20 +148,20 @@ impl Generator {
         let prefix = timing.stage("input_embedding", |_| {
             self.source.forward(&embedding(&vq.source, ids))
         });
-        let mut cache = Vec::new();
-        if profile != Profile::Quality {
-            timing.stage("transformer_prefix", |_| {
+        // CPU INT8 chooses activation scales dynamically. Keep the two
+        // inputs separate there to preserve the existing quantization.
+        let separate_prefill = profile == Profile::Ultra && self.device == Device::Cpu;
+        let mut cache = if separate_prefill {
+            timing.stage("transformer_prefix", |timing| {
                 let position = Tensor::arange(prefix_width, (Kind::Int64, self.device));
                 let rope = self.rope.select(&position);
-                let mut hidden = prefix.shallow_clone();
                 let mask = keep.unsqueeze(1).unsqueeze(1);
-                for block in &self.blocks {
-                    let (next, kv) = block.forward(&hidden, Some(&mask), Some(&rope), None, 0.);
-                    hidden = next;
-                    cache.push(kv);
-                }
-            });
-        }
+                self.prefill(prefix.shallow_clone(), &mask, &rope, prefix_width, timing)
+                    .1
+            })
+        } else {
+            Vec::new()
+        };
         let mut features = self.query.expand([batch, -1, -1], false);
         let mut latent = Tensor::zeros(
             [batch, *self.widths.last().unwrap(), vq.source.size()[1]],
@@ -151,7 +170,7 @@ impl Generator {
         let mut predictions = Vec::new();
 
         for (i, &width) in self.widths.iter().enumerate() {
-            let logits = timing.stage(format!("transformer_level_{i}"), |_| {
+            let logits = timing.stage(format!("transformer_level_{i}"), |timing| {
                 let target = self.source.forward(&features) + self.level_embedding.get(i as i64);
                 let mask = Tensor::cat(
                     &[
@@ -162,7 +181,7 @@ impl Generator {
                 )
                 .unsqueeze(1)
                 .unsqueeze(1);
-                let hidden = if profile == Profile::Quality {
+                let hidden = if profile == Profile::Quality || (i == 0 && !separate_prefill) {
                     let x = Tensor::cat(&[&prefix, &target], 1);
                     let positions = Tensor::cat(
                         &[
@@ -180,10 +199,26 @@ impl Generator {
                         .logical_not()
                         .logical_or(&source_rows.unsqueeze(0));
                     let mask = mask.logical_and(&allowed);
-                    self.stack(&x, &mask, &rope, None, 0.)
-                        .narrow(1, prefix_width, width)
+                    let hidden = if profile == Profile::Quality {
+                        self.stack(&x, &mask, &rope, None, 0., Some(timing))
+                    } else {
+                        // Prefix rows cannot attend to targets, so their K/V
+                        // remain valid when the first scale runs alongside them.
+                        let (hidden, prefix_cache) =
+                            self.prefill(x, &mask, &rope, prefix_width, timing);
+                        cache = prefix_cache;
+                        hidden
+                    };
+                    hidden.narrow(1, prefix_width, width)
                 } else {
-                    self.stack(&target, &mask, &self.levels[i].rope, Some(&cache), 0.)
+                    self.stack(
+                        &target,
+                        &mask,
+                        &self.levels[i].rope,
+                        Some(&cache),
+                        0.,
+                        Some(timing),
+                    )
                 };
                 self.logits(&self.norm.forward(&hidden), vq, i)
             });
@@ -265,7 +300,7 @@ impl Generator {
         let rope = self
             .rope
             .select(&Tensor::from_slice(&positions).to_device(self.device));
-        let result = self.stack(&x, &mask, &rope, None, dropout);
+        let result = self.stack(&x, &mask, &rope, None, dropout, None);
         self.norm
             .forward(&result.narrow(1, prefix_width, x.size()[1] - prefix_width))
             .split_with_sizes(&self.widths, 1)

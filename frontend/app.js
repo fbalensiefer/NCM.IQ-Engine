@@ -64,7 +64,7 @@ const mib = (n) => (n / 1048576).toFixed(1) + " MiB";
 
 function showStats(stats) {
   byId("stats-empty").hidden = Boolean(stats);
-  byId("detail").hidden = !stats;
+  byId("detail").hidden = true;
   if (!stats) {
     entries(byId("stats"), []);
     return;
@@ -74,15 +74,20 @@ function showStats(stats) {
   const rows = [
     ["Backend", stats.backend.toUpperCase() + " · " + stats.profile],
     ["Generation", ms(times.total)],
-    ["Input embedding", ms(times.input_embedding)],
-    ["Transformer", ms(transformer.reduce((total, [, time]) => total + time, 0))],
-    ["Neural decoder", ms(times.neural_decoder)],
     ["Model load", ms(stats.model_load_ms)],
     ["Checkpoint", mib(stats.checkpoint_bytes)],
     ["Peak process RSS", mib(stats.rss_bytes)],
   ];
   if ("accelerator_allocated_bytes" in stats) {
     rows.push(["Accelerator tensors", mib(stats.accelerator_allocated_bytes)]);
+  }
+  if (transformer.length) {
+    rows.splice(2, 0,
+      ["Input embedding", ms(times.input_embedding)],
+      ["Transformer", ms(transformer.reduce((total, [, time]) => total + time, 0))],
+      ["Neural decoder", ms(times.neural_decoder)],
+    );
+    byId("detail").hidden = false;
   }
   entries(byId("stats"), rows);
   entries(byId("stages"), Object.entries(times).map(([name, time]) => [name.replaceAll("_", " "), ms(time)]));
@@ -155,6 +160,7 @@ byId("composer").addEventListener("submit", (event) => {
       revision: session.revision,
       backend: byId("backend").value,
       profile: byId("profile").value,
+      profile_timings: byId("profile_timings").checked,
       history_turns: Number(byId("history").value || 0),
     };
     for (const [field, id] of [["context_limit", "context"], ...["temperature", "top_k", "top_p", "cfg_scale"].map((key) => [key, key])]) {

@@ -94,6 +94,7 @@ pub fn peak_rss_bytes() -> u64 {
 pub struct Timings {
     device: Device,
     detailed: bool,
+    transformer_breakdown: bool,
     pub ms: BTreeMap<String, f64>,
 }
 
@@ -102,20 +103,40 @@ impl Timings {
         Self {
             device,
             detailed,
+            transformer_breakdown: false,
             ms: BTreeMap::new(),
         }
     }
 
     pub fn stage<T>(&mut self, label: impl Into<String>, run: impl FnOnce(&mut Self) -> T) -> T {
-        if self.detailed {
-            synchronize(self.device);
+        if !self.detailed {
+            return run(self);
         }
+        synchronize(self.device);
         let start = Instant::now();
         let result = run(self);
-        if self.detailed {
-            synchronize(self.device);
-        }
+        synchronize(self.device);
         *self.ms.entry(label.into()).or_default() += start.elapsed().as_secs_f64() * 1000.;
         result
+    }
+
+    pub fn with_transformer_breakdown(mut self) -> Self {
+        self.transformer_breakdown = true;
+        self
+    }
+
+    pub fn block_stage<T>(
+        timing: &mut Option<&mut Self>,
+        label: &'static str,
+        run: impl FnOnce() -> T,
+    ) -> T {
+        if let Some(timing) = timing
+            .as_deref_mut()
+            .filter(|timing| timing.transformer_breakdown)
+        {
+            timing.stage(label, |_| run())
+        } else {
+            run()
+        }
     }
 }

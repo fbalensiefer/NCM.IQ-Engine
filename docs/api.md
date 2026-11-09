@@ -14,6 +14,8 @@ Message requests can override `backend`, `profile`, `context_limit`, `history_tu
 
 Each successful message or reset advances the revision. A stale revision returns HTTP 409. Retrieve the session before retrying.
 
+By default, `stats.milliseconds` contains only `total`, measured through device completion. Set `"profile_timings": true` in a message request to collect the synchronized stage breakdown. The web UI exposes this as **Measure individual inference stages**. The additional synchronization can increase request latency.
+
 ```sh
 curl -fsS http://127.0.0.1:8000/api/config
 session=$(curl -fsS http://127.0.0.1:8000/api/sessions \

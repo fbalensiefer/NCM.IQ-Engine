@@ -4,6 +4,7 @@ use std::{collections::BTreeMap, fs, path::Path};
 use tch::manual_seed;
 
 use crate::{
+    device::Timings,
     download::digest,
     engine::{Engine, Output},
 };
@@ -52,6 +53,7 @@ pub fn run(
     runs: usize,
     seed: i64,
     threads: i32,
+    transformer_breakdown: bool,
 ) -> Result<Value> {
     let items: Vec<String> = serde_json::from_slice(prompts)?;
     ensure!(
@@ -80,7 +82,11 @@ pub fn run(
     for i in 0..runs {
         manual_seed(seed.wrapping_add(i as i64));
         let prompt = &items[i % items.len()];
-        generation.push(engine.generate(prompt, sampling, None, true)?);
+        let mut timing = Timings::new(engine.device, true);
+        if transformer_breakdown {
+            timing = timing.with_transformer_breakdown();
+        }
+        generation.push(engine.generate_timed(prompt, sampling, None, timing)?);
         reconstruction.push(engine.reconstruct(prompt, true)?);
     }
     let metadata = &reconstruction.last().unwrap().stats;
@@ -94,6 +100,7 @@ pub fn run(
         "threads": threads,
         "seed": seed,
         "warmup": warmup,
+        "transformer_breakdown": transformer_breakdown,
         "runs": runs,
         "prompts_sha256": digest(prompts),
         "checkpoint_bytes": metadata.checkpoint_bytes,
@@ -129,6 +136,11 @@ pub fn compare(a: &Path, b: &Path) -> Result<()> {
             "incompatible benchmark parameter {key}"
         );
     }
+    let breakdown = |report: &Value| report["transformer_breakdown"].as_bool().unwrap_or(false);
+    ensure!(
+        breakdown(&a) == breakdown(&b),
+        "incompatible Transformer breakdown modes"
+    );
     println!("| Metric | Baseline ms | Candidate ms | Speedup |\n|---|---:|---:|---:|");
     for (label, pointer) in [
         ("Full generation", "/steady_latency_ms/median"),

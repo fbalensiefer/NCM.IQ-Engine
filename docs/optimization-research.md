@@ -2,9 +2,9 @@
 
 ## Transformer prefix reuse
 
-The attention mask prevents source queries from seeing target positions. Source positions and their RoPE coordinates remain fixed across scales, so their layer-wise keys and values can be computed once per request. Balanced trims right padding and reuses that cache for each rectangular target attention pass. Target positions attend bidirectionally within each scale and use the accumulated latent from earlier scales. LibTorch dispatches scaled dot-product attention for the selected backend.
+The attention mask prevents source queries from seeing target positions. Balanced trims right padding and evaluates the source together with the first concept scale. It keeps only the source keys and values from each layer, then reuses them for the remaining rectangular attention passes. Source positions and their RoPE coordinates remain fixed across scales. Target positions attend bidirectionally within each scale and use the accumulated latent from earlier scales. LibTorch dispatches scaled dot-product attention for the selected backend.
 
-On the measured workload, the Balanced Transformer stage was 6.34× faster on CPU and 5.41× faster on MPS than Quality. Gains vary with prefix length and backend. [Measurement protocol](performance.md)
+The largest category in the synchronized block diagnostics was linear projections on both CPU and MPS. A preallocated KV buffer reduced end-to-end median time by about 1% in the tested runs and increased the final MPS driver allocation from 1,156 MB to 1,198 MB. The combined pass keeps LibTorch's concatenation for subsequent scales and reduced median steady generation latency by 9% on CPU and 11% on MPS in Balanced. CPU Ultra-light keeps separate passes because dynamic INT8 quantization chooses activation scales from each input. Gains vary with prefix length and backend. [Measurement protocol](performance.md)
 
 ## Exact RVQ and neural decoding
 
