@@ -1,69 +1,65 @@
 # NCM Chat
 
-A local inference workbench and chat interface for [Next-Concept Modeling](https://arxiv.org/pdf/2610.14162v1). A multiscale residual VQ-VAE represents text as discrete code sequences. A Transformer predicts all positions of a scale in parallel, adds the resulting residual to the reconstruction, and proceeds to the next scale. A neural decoder maps the final latent to text. The application runs these models locally.
-
-The official **XSum** checkpoint summarizes passages. Select a **dialogue-adapted** checkpoint to include previous turns in model context. The included training recipe demonstrates context-dependent replies on a tiny corpus. General dialogue quality depends on adaptation data and evaluation.
+A Rust inference engine, local chat app, and dialogue adaptation tool for [Next-Concept Modeling](https://arxiv.org/pdf/2610.14162v1). The Transformer predicts one complete scale of concepts at a time. The multiscale residual VQ-VAE reconstructs the final latent and decodes it to text. The Rust executable loads the official XSum checkpoint archives directly and serves the web interface over loopback.
 
 ## Run locally
 
-Use Python 3.12 on Apple Silicon macOS or Linux. PyTorch selects an available CUDA or MPS device automatically, with CPU as the fallback. CPU and MPS were tested on an Apple M2. The CUDA path uses PyTorch dispatch and awaits hardware validation.
+Install Rust 1.99 or newer, a C++ toolchain, `curl`, and `unzip`. The Apple Silicon SDK setup also uses `jq`. The setup script extracts the C++ headers and libraries for LibTorch 2.13 from the official PyTorch distribution. Build and inference require no Python interpreter.
 
-```bash
-python3.12 -m venv .venv
-source .venv/bin/activate
-python -m pip install '.[download]'
-ncm-download
-HF_HUB_OFFLINE=1 ncm-chat
+```sh
+LIBTORCH=$(bash scripts/libtorch.sh)
+export LIBTORCH
+cargo build --release --locked
+
+target/release/ncm-chat download
+target/release/ncm-chat serve
 ```
 
-Open [the local interface](http://127.0.0.1:8000). The server binds to loopback and stores sessions in `sessions/chat.sqlite3`. For an existing checkout with populated `artifacts/xsum` and `artifacts/gpt2`, start at the launch command after installing. The 624 MiB official checkpoint pair and the text vocabulary are downloaded separately. Subsequent requests use local files.
+Open [the local interface](http://127.0.0.1:8000). Sessions are stored in `sessions/chat.sqlite3`. The download command checks the pinned artifact hashes and reuses verified local files. Inference, serving, benchmarks, and adaptation run offline. The official checkpoint pair is 624 MiB.
+
+```sh
+target/release/ncm-chat generate --backend cpu "The library opens its reading room on Monday."
+target/release/ncm-chat reconstruct --backend mps "Exact RVQ reconstruction runs locally."
+```
+
+CPU and MPS were exercised on Apple M2. Auto selects an available accelerator and falls back to CPU. Linux CPU setup is in CI, and CUDA selection requires a CUDA-capable LibTorch build. The released XSum checkpoint summarizes the current passage. A dialogue-adapted checkpoint receives previous turns as context.
 
 | Profile | Behavior |
 |---|---|
-| Quality | FP32 upstream Transformer and RVQ inference with the released decoder policy. |
-| Balanced | FP32 prefix K/V reuse, padded-prefix trimming, final latent reuse, cached exact RVQ norms and sparse decoder penalties. |
-| Ultra-light | Experimental CPU INT8 eligible linears, or MPS FP16 decoder output projection. Disk artifacts are shared across profiles. |
+| Quality | FP32, full padded-prefix evaluation at every scale. |
+| Balanced | FP32, trimmed prefix, reusable prefix K/V, and cached exact RVQ norms. |
+| Ultra-light | Experimental CPU dynamic INT8 linears or MPS FP16 decoder projection. |
 
-## Measured on Apple M2
+## Benchmarks and tests
 
-| Backend | Quality median | Balanced median | Transformer speedup | Exact RVQ speedup | Full generation speedup |
-|---|---:|---:|---:|---:|---:|
-| CPU | 1,586 ms | 286 ms | 5.58× | 1.38× | 5.54× |
-| MPS | 762 ms | 137 ms | 4.89× | 1.59× | 5.58× |
+```sh
+target/release/ncm-chat benchmark --backend cpu --profile quality --output results/quality.json
+target/release/ncm-chat benchmark --backend cpu --profile balanced --output results/balanced.json
+target/release/ncm-chat compare results/quality.json results/balanced.json
 
-Balanced matched the reference concept and text-token arrays on all 12 runs per backend across three authored prompts. Process peak RSS was 1.51 GiB on CPU and 0.97 GiB on MPS. MPS driver allocation was 1.19 GiB at the final sample, reported separately because the M2 uses unified memory. [Measurement protocol and full results](docs/performance.md).
-
-```bash
-ncm-benchmark --device cpu --profile quality --output results/quality.json
-ncm-benchmark --device cpu --profile balanced --output results/balanced.json
-python -m benchmarks.compare results/quality.json results/balanced.json
-python -m benchmarks.quality results/balanced.json
+cargo test --locked
+cargo test --release --locked --test official -- --ignored
 ```
 
-Replace `cpu` with `mps` for Apple GPU timing. Run each profile in a fresh process. [Optimization experiments](docs/optimization-research.md).
+The report separates end-to-end latency, per-scale Transformer time, RVQ, neural decoder time, and decoder token selection. It records code and token hashes for parity checks. See the [Rust validation report](docs/rust-validation.md), [prior reference results](docs/performance.md), and [optimization research](docs/optimization-research.md).
 
 ## Adapt for dialogue
 
-Training data is JSONL. Each line contains an array of chronological objects with `user` and `assistant` strings. Each turn supervises all target concept scales using the frozen neural tokenizer and teacher-forced residual latents. The default trains the generator heads. `--full` trains the whole generator.
+Each line of the training file is a JSON array of chronological `user` and `assistant` pairs. The trainer freezes the VQ-VAE, encodes the target text, and supervises all target concept scales with teacher-forced residual latents. By default it adapts the generator heads. Use `--full` to train all generator weights.
 
-```bash
-HF_HUB_OFFLINE=1 ncm-train --train training/smoke.jsonl \
-  --output artifacts/badge-dialogue --device cpu --steps 240 --learning-rate 0.002
-HF_HUB_OFFLINE=1 ncm-chat
+```sh
+target/release/ncm-chat train --backend cpu --train training/smoke.jsonl \
+  --output artifacts/my-dialogue --steps 240 --learning-rate 0.002
+target/release/ncm-chat serve
 ```
 
-Use a fresh output directory. Choose the resulting model in the interface. The smoke corpus contains two two-turn exchanges. The trained model recalled both seen colors but failed to recall an unseen color. [Dialogue validation](docs/dialogue.md).
+The output directory must be new. Select the resulting model in the web interface. The tiny [smoke corpus](training/smoke.jsonl) exercises the training and dialogue path. Held-out dialogue quality requires a separate evaluation.
 
-## Development
+## Repository layout
 
-```bash
-python -m pip install '.[dev]'
-ruff check .
-ruff format --check .
-HF_HUB_OFFLINE=1 python -m pytest -q
-HF_HUB_OFFLINE=1 NCM_TEST_ARTIFACTS=artifacts python -m pytest -q -m model
-```
+- `src/` contains the Rust inference engine, Axum API, SQLite sessions, adaptation, and benchmarks. Small C++ bindings expose MPS telemetry and LibTorch's packed INT8 linears.
+- `frontend/` contains the web interface served from assets embedded in the binary.
+- `docs/` contains the [architecture](docs/architecture.md), [checkpoint and license audit](docs/research-audit.md), and [research roadmap](docs/optimization-roadmap.md).
+- The earlier Python implementation and its reports remain as the numerical and performance reference. Cargo builds and runs the application independently.
 
-See the [architecture](docs/architecture.md), [research and license audit](docs/research-audit.md), and [roadmap](docs/optimization-roadmap.md). The implementation supports the official XSum architecture and dialogue checkpoints derived from it. Model outputs are limited to the checkpoint's fixed 48-position neural decoder. The app serializes inference to bound model residency. MLX is an isolated research experiment.
-
-MIT. The [license](LICENSE) preserves the copyright notice for the [Hazy Research reference code](https://github.com/HazyResearch/ncm).
+MIT. The [license](LICENSE) preserves the notice for [Hazy Research](https://github.com/HazyResearch/ncm).

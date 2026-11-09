@@ -79,7 +79,7 @@ function showStats(stats) {
     ["Neural decoder", ms(times.neural_decoder)],
     ["Model load", ms(stats.model_load_ms)],
     ["Checkpoint", mib(stats.checkpoint_bytes)],
-    ["Process RSS", mib(stats.rss_bytes)],
+    ["Peak process RSS", mib(stats.rss_bytes)],
   ];
   if ("accelerator_allocated_bytes" in stats) {
     rows.push(["Accelerator tensors", mib(stats.accelerator_allocated_bytes)]);
@@ -177,7 +177,7 @@ run(async () => {
   for (const item of config.models) model.add(new Option(item.name, item.name));
   for (const backend of config.backends) byId("backend").add(new Option(backend.toUpperCase(), backend));
   if (!config.models.length) {
-    status.textContent = "No checkpoint found. Run ncm-download, then restart the server.";
+    status.textContent = "No checkpoint found. Run ncm-chat download, then restart the server.";
     return;
   }
   const last = localStorage.getItem("ncm-model");

@@ -1,4 +1,4 @@
-# Performance
+# Python reference performance
 
 Apple M2 with 8 GB unified memory, macOS 26.6.2, Python 3.12.16, PyTorch 2.15.0, four CPU threads and batch size one. The [raw JSON reports](results/) record three authored prompts, two warm-up requests, 12 timed requests and seed 2026. P95 uses nearest rank. Each profile ran in a separate process. The first request includes allocator and kernel warm-up. Load timing starts after the Python runtime and its imports have initialized.
 

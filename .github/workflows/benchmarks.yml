@@ -1,4 +1,4 @@
-name: Checkpoint benchmarks
+name: Rust checkpoint benchmarks
 on:
   workflow_dispatch:
     inputs:
@@ -22,32 +22,28 @@ jobs:
     env:
       NCM_DEVICE: ${{ inputs.device }}
       NCM_RUNS: ${{ inputs.runs }}
-      TOKENIZERS_PARALLELISM: 'false'
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - run: rustup toolchain install 1.99.1 --profile minimal
+      - uses: actions/cache@v4
         with:
-          python-version: '3.12'
-      - name: Install CPU PyTorch on Linux
-        if: runner.os == 'Linux'
-        run: python -m pip install 'torch>=2.8,<3' --index-url https://download.pytorch.org/whl/cpu
-      - run: python -m pip install '.[dev,download]'
-      - run: ncm-download
-      - name: Verify official checkpoints offline
-        env:
-          HF_HUB_OFFLINE: '1'
-          NCM_TEST_ARTIFACTS: artifacts
-        run: python -m pytest -q -m model
-      - name: Measure the three profiles in separate processes
-        env:
-          HF_HUB_OFFLINE: '1'
+          path: .libtorch
+          key: libtorch-2.13.0-${{ runner.os }}-${{ runner.arch }}
+      - name: Set up LibTorch
+        run: |
+          sdk=$(bash scripts/libtorch.sh)
+          echo "LIBTORCH=$sdk" >> "$GITHUB_ENV"
+      - run: cargo +1.99.1 build --release --locked
+      - run: target/release/ncm-chat download
+      - run: cargo +1.99.1 test --release --locked --test official -- --ignored
+      - name: Measure three profiles
         run: |
           for profile in quality balanced ultra; do
-            ncm-benchmark --device "$NCM_DEVICE" --profile "$profile" --runs "$NCM_RUNS" --output "results/$profile.json"
+            target/release/ncm-chat benchmark --backend "$NCM_DEVICE" --profile "$profile" --runs "$NCM_RUNS" --output "results/$profile.json"
           done
-          python -m benchmarks.compare results/quality.json results/balanced.json
-          python -m benchmarks.compare results/quality.json results/ultra.json
+          target/release/ncm-chat compare results/quality.json results/balanced.json
+          target/release/ncm-chat compare results/quality.json results/ultra.json
       - uses: actions/upload-artifact@v4
         with:
-          name: ncm-benchmark-${{ inputs.device }}
+          name: ncm-rust-benchmark-${{ inputs.device }}
           path: results

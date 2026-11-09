@@ -1,0 +1,29 @@
+[package]
+name = "ncm-chat"
+version = "0.2.0"
+edition = "2024"
+rust-version = "1.99"
+license = "MIT"
+description = "Local Next-Concept Modeling inference and dialogue adaptation"
+
+[dependencies]
+anyhow = "1"
+axum = "0.8"
+candle-core = "0.11.1"
+clap = { version = "4", features = ["derive"] }
+libc = "0.2"
+rusqlite = { version = "0.38", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+sha2 = "0.10"
+tch = "0.26.0"
+tokenizers = { version = "0.23.2", default-features = false, features = ["fancy-regex"] }
+tokio = { version = "1", features = ["macros", "net", "rt-multi-thread"] }
+uuid = { version = "1", features = ["v4"] }
+
+[build-dependencies]
+cc = "1"
+
+[profile.release]
+strip = "debuginfo"

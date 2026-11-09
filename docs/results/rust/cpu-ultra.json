@@ -1,0 +1,272 @@
+{
+  "checkpoint_bytes": 653981290,
+  "device": "cpu",
+  "first_generation_ms": 318.96625,
+  "generation": [
+    {
+      "concept_sha256": "611116e4c6283671d57a22aae97ad8ce12374635f9e62464d3c5153ecc932008",
+      "text": "A £6.6m revamp centre is revamp of £2.2m revamp of Cardiff city centre.",
+      "token_sha256": "7078f3883f5dc93aabba5e93a01519db3098bcc916a8339f3b8d5720afda4a3c"
+    },
+    {
+      "concept_sha256": "7bc117e26cd18887e1b64f8176fe2e38dc4fbca8bd40dc0f4974774307182943",
+      "text": "Two trains have been opened at doors at the derelictlict pier in Cria. Cumbria will reopen on Monday.",
+      "token_sha256": "99fc210e6db10f08b201f209827a5bb26fc39300fb0366e55bbe1458761575cf"
+    },
+    {
+      "concept_sha256": "7dc57da820c234a273642add9f6bf659c6aae74d6621404ae28023387c02ec74",
+      "text": "Researchers at the University of London from California and University University are studying university - finding how sensitive can temperatures colder in freezing temperatures?",
+      "token_sha256": "50a5af92e3f6985bf999b89426cd9e72d215130ce1cd2986d1cf3c604856f3f8"
+    },
+    {
+      "concept_sha256": "611116e4c6283671d57a22aae97ad8ce12374635f9e62464d3c5153ecc932008",
+      "text": "A £6.6m revamp centre is revamp of £2.2m revamp of Cardiff city centre.",
+      "token_sha256": "7078f3883f5dc93aabba5e93a01519db3098bcc916a8339f3b8d5720afda4a3c"
+    },
+    {
+      "concept_sha256": "7bc117e26cd18887e1b64f8176fe2e38dc4fbca8bd40dc0f4974774307182943",
+      "text": "Two trains have been opened at doors at the derelictlict pier in Cria. Cumbria will reopen on Monday.",
+      "token_sha256": "99fc210e6db10f08b201f209827a5bb26fc39300fb0366e55bbe1458761575cf"
+    },
+    {
+      "concept_sha256": "7dc57da820c234a273642add9f6bf659c6aae74d6621404ae28023387c02ec74",
+      "text": "Researchers at the University of London from California and University University are studying university - finding how sensitive can temperatures colder in freezing temperatures?",
+      "token_sha256": "50a5af92e3f6985bf999b89426cd9e72d215130ce1cd2986d1cf3c604856f3f8"
+    },
+    {
+      "concept_sha256": "611116e4c6283671d57a22aae97ad8ce12374635f9e62464d3c5153ecc932008",
+      "text": "A £6.6m revamp centre is revamp of £2.2m revamp of Cardiff city centre.",
+      "token_sha256": "7078f3883f5dc93aabba5e93a01519db3098bcc916a8339f3b8d5720afda4a3c"
+    },
+    {
+      "concept_sha256": "7bc117e26cd18887e1b64f8176fe2e38dc4fbca8bd40dc0f4974774307182943",
+      "text": "Two trains have been opened at doors at the derelictlict pier in Cria. Cumbria will reopen on Monday.",
+      "token_sha256": "99fc210e6db10f08b201f209827a5bb26fc39300fb0366e55bbe1458761575cf"
+    },
+    {
+      "concept_sha256": "7dc57da820c234a273642add9f6bf659c6aae74d6621404ae28023387c02ec74",
+      "text": "Researchers at the University of London from California and University University are studying university - finding how sensitive can temperatures colder in freezing temperatures?",
+      "token_sha256": "50a5af92e3f6985bf999b89426cd9e72d215130ce1cd2986d1cf3c604856f3f8"
+    },
+    {
+      "concept_sha256": "611116e4c6283671d57a22aae97ad8ce12374635f9e62464d3c5153ecc932008",
+      "text": "A £6.6m revamp centre is revamp of £2.2m revamp of Cardiff city centre.",
+      "token_sha256": "7078f3883f5dc93aabba5e93a01519db3098bcc916a8339f3b8d5720afda4a3c"
+    },
+    {
+      "concept_sha256": "7bc117e26cd18887e1b64f8176fe2e38dc4fbca8bd40dc0f4974774307182943",
+      "text": "Two trains have been opened at doors at the derelictlict pier in Cria. Cumbria will reopen on Monday.",
+      "token_sha256": "99fc210e6db10f08b201f209827a5bb26fc39300fb0366e55bbe1458761575cf"
+    },
+    {
+      "concept_sha256": "7dc57da820c234a273642add9f6bf659c6aae74d6621404ae28023387c02ec74",
+      "text": "Researchers at the University of London from California and University University are studying university - finding how sensitive can temperatures colder in freezing temperatures?",
+      "token_sha256": "50a5af92e3f6985bf999b89426cd9e72d215130ce1cd2986d1cf3c604856f3f8"
+    }
+  ],
+  "generation_stage_ms": {
+    "concept_generation": {
+      "median": 217.76825,
+      "p95": 305.292375
+    },
+    "concept_sampling": {
+      "median": 0.4573125,
+      "p95": 0.5913729999999999
+    },
+    "decoder_selection": {
+      "median": 2.9456875,
+      "p95": 3.27425
+    },
+    "input_embedding": {
+      "median": 0.166042,
+      "p95": 0.243958
+    },
+    "input_transfer": {
+      "median": 0.0040415,
+      "p95": 0.006
+    },
+    "neural_decoder": {
+      "median": 6.2911874999999995,
+      "p95": 6.956208999999999
+    },
+    "output_transfer": {
+      "median": 0.003021,
+      "p95": 0.017915999999999998
+    },
+    "preprocessing": {
+      "median": 0.09918750000000001,
+      "p95": 0.211917
+    },
+    "rvq_generation": {
+      "median": 2.3529584999999997,
+      "p95": 2.634875
+    },
+    "text_reconstruction": {
+      "median": 0.014292,
+      "p95": 0.038917
+    },
+    "total": {
+      "median": 227.683646,
+      "p95": 315.24375
+    },
+    "transformer": {
+      "median": 214.698896,
+      "p95": 301.92703900000004
+    },
+    "transformer_level_0": {
+      "median": 8.191083500000001,
+      "p95": 10.048792
+    },
+    "transformer_level_1": {
+      "median": 8.57225,
+      "p95": 11.329459
+    },
+    "transformer_level_2": {
+      "median": 12.7381455,
+      "p95": 15.973041
+    },
+    "transformer_level_3": {
+      "median": 13.104958,
+      "p95": 16.587167
+    },
+    "transformer_level_4": {
+      "median": 18.2374995,
+      "p95": 23.536167
+    },
+    "transformer_level_5": {
+      "median": 22.1960415,
+      "p95": 28.745334
+    },
+    "transformer_level_6": {
+      "median": 22.5191875,
+      "p95": 26.983583
+    },
+    "transformer_level_7": {
+      "median": 27.52075,
+      "p95": 93.786333
+    },
+    "transformer_level_8": {
+      "median": 35.289729,
+      "p95": 37.148166
+    },
+    "transformer_prefix": {
+      "median": 43.870771,
+      "p95": 103.545166
+    }
+  },
+  "libtorch": "2.13.0",
+  "load_and_first_ms": 601.4817909999999,
+  "load_ms": 282.515541,
+  "mps_current_allocated_bytes": null,
+  "mps_driver_allocated_bytes": null,
+  "peak_rss_bytes": 1193099264,
+  "profile": "ultra",
+  "prompts_sha256": "ca63a6b1276d3226f817f6b3d21dd597e18fc403290d71ca6a0d65c56d7b7a65",
+  "reconstruction": [
+    {
+      "concept_sha256": "3fb2010dd083b67bbc4aeb6ac16c6bad7af5301bc2c0937076f6e943f2362057",
+      "text": "The city library has opened a new reading room for children after a six month renovation. The room opens on Monday and offers free weekend workshops.",
+      "token_sha256": "7dec2bd35ba10803d258af495ab9b755535ce9747a7ea6fc4dc09b890b8d06f3"
+    },
+    {
+      "concept_sha256": "b76a0a2325260323197b369e50d10017879987d7dbd861ee4fd21e446fe3845a",
+      "text": "A volunteer-run ferry service will restart on Saturday after repairs to the main pier. The first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. Tickets can be bought at the bought office. The pier was",
+      "token_sha256": "abc51332fcc05bc52342ce14848b7495db57bbe672e4f0ed5765195e0a7c84c8"
+    },
+    {
+      "concept_sha256": "102b976b591b3f80ec17dc5d19b5e85cf70e85e61eddaafb53c489c9a8137cae",
+      "text": "A research team at a university has tested whether planting trees near bus stops can lower summertime temperatures for passengers. During the experiment, the researchers measured afternoon conditions at forty stops across three predominant. They found that stops next to mature trees were",
+      "token_sha256": "8f321128064e1fd0d6e4b8e82e69469f41da02bf2b14b86601045230e763ee62"
+    },
+    {
+      "concept_sha256": "3fb2010dd083b67bbc4aeb6ac16c6bad7af5301bc2c0937076f6e943f2362057",
+      "text": "The city library has opened a new reading room for children after a six month renovation. The room opens on Monday and offers free weekend workshops.",
+      "token_sha256": "7dec2bd35ba10803d258af495ab9b755535ce9747a7ea6fc4dc09b890b8d06f3"
+    },
+    {
+      "concept_sha256": "b76a0a2325260323197b369e50d10017879987d7dbd861ee4fd21e446fe3845a",
+      "text": "A volunteer-run ferry service will restart on Saturday after repairs to the main pier. The first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. Tickets can be bought at the bought office. The pier was",
+      "token_sha256": "abc51332fcc05bc52342ce14848b7495db57bbe672e4f0ed5765195e0a7c84c8"
+    },
+    {
+      "concept_sha256": "102b976b591b3f80ec17dc5d19b5e85cf70e85e61eddaafb53c489c9a8137cae",
+      "text": "A research team at a university has tested whether planting trees near bus stops can lower summertime temperatures for passengers. During the experiment, the researchers measured afternoon conditions at forty stops across three predominant. They found that stops next to mature trees were",
+      "token_sha256": "8f321128064e1fd0d6e4b8e82e69469f41da02bf2b14b86601045230e763ee62"
+    },
+    {
+      "concept_sha256": "3fb2010dd083b67bbc4aeb6ac16c6bad7af5301bc2c0937076f6e943f2362057",
+      "text": "The city library has opened a new reading room for children after a six month renovation. The room opens on Monday and offers free weekend workshops.",
+      "token_sha256": "7dec2bd35ba10803d258af495ab9b755535ce9747a7ea6fc4dc09b890b8d06f3"
+    },
+    {
+      "concept_sha256": "b76a0a2325260323197b369e50d10017879987d7dbd861ee4fd21e446fe3845a",
+      "text": "A volunteer-run ferry service will restart on Saturday after repairs to the main pier. The first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. Tickets can be bought at the bought office. The pier was",
+      "token_sha256": "abc51332fcc05bc52342ce14848b7495db57bbe672e4f0ed5765195e0a7c84c8"
+    },
+    {
+      "concept_sha256": "102b976b591b3f80ec17dc5d19b5e85cf70e85e61eddaafb53c489c9a8137cae",
+      "text": "A research team at a university has tested whether planting trees near bus stops can lower summertime temperatures for passengers. During the experiment, the researchers measured afternoon conditions at forty stops across three predominant. They found that stops next to mature trees were",
+      "token_sha256": "8f321128064e1fd0d6e4b8e82e69469f41da02bf2b14b86601045230e763ee62"
+    },
+    {
+      "concept_sha256": "3fb2010dd083b67bbc4aeb6ac16c6bad7af5301bc2c0937076f6e943f2362057",
+      "text": "The city library has opened a new reading room for children after a six month renovation. The room opens on Monday and offers free weekend workshops.",
+      "token_sha256": "7dec2bd35ba10803d258af495ab9b755535ce9747a7ea6fc4dc09b890b8d06f3"
+    },
+    {
+      "concept_sha256": "b76a0a2325260323197b369e50d10017879987d7dbd861ee4fd21e446fe3845a",
+      "text": "A volunteer-run ferry service will restart on Saturday after repairs to the main pier. The first crossing leaves at nine in the morning and additional crossings will run throughout the afternoon. Tickets can be bought at the bought office. The pier was",
+      "token_sha256": "abc51332fcc05bc52342ce14848b7495db57bbe672e4f0ed5765195e0a7c84c8"
+    },
+    {
+      "concept_sha256": "102b976b591b3f80ec17dc5d19b5e85cf70e85e61eddaafb53c489c9a8137cae",
+      "text": "A research team at a university has tested whether planting trees near bus stops can lower summertime temperatures for passengers. During the experiment, the researchers measured afternoon conditions at forty stops across three predominant. They found that stops next to mature trees were",
+      "token_sha256": "8f321128064e1fd0d6e4b8e82e69469f41da02bf2b14b86601045230e763ee62"
+    }
+  ],
+  "reconstruction_stage_ms": {
+    "input_transfer": {
+      "median": 0.007646,
+      "p95": 0.010291
+    },
+    "neural_decoder": {
+      "median": 7.244021,
+      "p95": 8.8485
+    },
+    "neural_encoder": {
+      "median": 0.071604,
+      "p95": 0.094417
+    },
+    "preprocessing": {
+      "median": 0.0994995,
+      "p95": 0.214917
+    },
+    "rvq_reconstruction": {
+      "median": 2.0082915000000003,
+      "p95": 2.195625
+    },
+    "rvq_search": {
+      "median": 7.159542,
+      "p95": 7.777625
+    },
+    "text_reconstruction": {
+      "median": 0.022104000000000002,
+      "p95": 0.028541999999999998
+    },
+    "total": {
+      "median": 16.668646,
+      "p95": 18.495917000000002
+    }
+  },
+  "requests_per_second": 4.465522674034106,
+  "runs": 12,
+  "runtime": "rust",
+  "seed": 2026,
+  "steady_latency_ms": {
+    "median": 211.106583,
+    "p95": 285.949334
+  },
+  "task": "xsum",
+  "threads": 4,
+  "warmup": 2
+}

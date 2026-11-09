@@ -1,4 +1,4 @@
-# Dialogue adaptation
+# Python reference dialogue adaptation
 
 The official release provides conditional summarization, translation and Sudoku. Dialogue is trained separately using conditional concept cross-entropy. The adaptation freezes the neural tokenizer. It encodes the answer plus EOS and padding, obtains each target code, and computes the teacher input for each scale from the previous scales' true residual sum. One block-diagonal Transformer pass processes the scale blocks. The optional heads-only path reuses hidden states with a bounded cache.
 
