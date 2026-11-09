@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 
 
@@ -13,9 +14,11 @@ class TextDecoder:
         self.allowance = allowance
         self.cut_at_eos = bool(config.get("cut_at_eos", True))
 
-    def select(self, logits):
+    def select(self, logits, *, sparse=False):
         if self.freq <= 0 and not self.adj:
             return logits.argmax(-1)
+        if sparse and logits.shape[0] == 1:
+            return self._select_sparse(logits)
         batch, steps, width = logits.shape
         # Upstream uses FP64 here. This stays on CPU for MPS compatibility.
         logits = logits.cpu().double()
@@ -43,6 +46,46 @@ class TextDecoder:
             history.append(token[:, None])
             counts.scatter_add_(1, token[:, None], one)
         return out
+
+    def _select_sparse(self, logits):
+        # Every unseen token has count zero. Apply its allowance in one
+        # broadcast, then recompute only the previously selected columns.
+        scores = logits[0].cpu().double().numpy().copy()
+        steps, width = scores.shape
+        allowance = (
+            self.allowance[:width].numpy() * steps
+            if self.allowance is not None
+            else None
+        )
+        use_frequency = self.freq > 0
+        original = (
+            scores.copy()
+            if allowance is not None and use_frequency and self.deficit > 0
+            else scores
+        )
+        if original is not scores:
+            scores += (self.deficit * (steps - np.arange(steps)) / steps)[
+                :, None
+            ] * allowance
+        alpha, window, decay = (self.adj + [1, 1])[:3] if self.adj else (0, 0, 1)
+        counts = {}
+        history = []
+        for t, row in enumerate(scores):
+            if use_frequency:
+                coefficient = self.deficit * ((steps - t) / steps)
+                for token, count in counts.items():
+                    quota = allowance[token] if allowance is not None else 0
+                    row[token] = original[t, token] - self.freq * max(count - quota, 0)
+                    if allowance is not None and self.deficit > 0:
+                        row[token] += coefficient * max(quota - count, 0)
+            for j, token in enumerate(
+                reversed(history[-int(window) :]) if window else ()
+            ):
+                row[token] -= alpha * decay**j
+            token = int(row.argmax())
+            history.append(token)
+            counts[token] = counts.get(token, 0) + 1
+        return torch.tensor([history], dtype=torch.long)
 
     def text(self, ids):
         eos, pad = self.vocab.eos_token_id, self.vocab.pad_token_id
