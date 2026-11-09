@@ -1,5 +1,0 @@
-{"torch": "2.15.0", "mlx": "0.32.4", "runs": 64}
-{"dtype": "float32", "prefix": 32, "query": 48, "mps_ms": 0.2809375000651926, "mlx_ms": 0.2710625049076043, "max_abs_error": 0.0}
-{"dtype": "float32", "prefix": 512, "query": 48, "mps_ms": 0.3750415053218603, "mlx_ms": 0.3412295045563951, "max_abs_error": 0.0}
-{"dtype": "float16", "prefix": 32, "query": 48, "mps_ms": 0.32949949672911316, "mlx_ms": 0.2792710074572824, "max_abs_error": 6.103515625e-05}
-{"dtype": "float16", "prefix": 512, "query": 48, "mps_ms": 0.3835414972854778, "mlx_ms": 0.31735399534227327, "max_abs_error": 0.0001220703125}

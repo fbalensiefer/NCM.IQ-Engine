@@ -1,3 +1,0 @@
-# The original Python implementation is retained as the measured reference.
-*.py linguist-vendored
-pyproject.toml linguist-vendored

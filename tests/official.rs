@@ -18,7 +18,7 @@ fn official_xsum_cpu_and_mps() -> Result<()> {
     let vocabulary = directory.join("gpt2");
     let prompts: Vec<String> = serde_json::from_str(PROMPTS)?;
     let references: serde_json::Value =
-        serde_json::from_str(include_str!("../docs/results/cpu-balanced.json"))?;
+        serde_json::from_str(include_str!("../docs/results/rust/cpu-quality.json"))?;
     let mut backends = vec![Backend::Cpu];
     if tch::utils::has_mps() {
         backends.push(Backend::Mps);

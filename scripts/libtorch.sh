@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Extract the official native LibTorch SDK from a wheel without a Python runtime.
+# Extract and verify the official native LibTorch SDK.
+
 set -euo pipefail
 version=2.13.0
 output=${1:-.libtorch}

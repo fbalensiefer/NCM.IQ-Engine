@@ -24,4 +24,4 @@ The app owns a single loaded model per process and replaces it on a model, devic
 
 ## Rust runtime
 
-The application enters through the Cargo binary in `src/main.rs`. The engine reads the official nested PyTorch archives with Candle's Rust checkpoint reader and runs tensor math through LibTorch via tch. The tokenizer vocabulary is loaded with the Rust Tokenizers crate. Axum serves the embedded UI and rusqlite persists sessions. The same inference code powers both interactive and benchmark commands. Dialogue training uses LibTorch autograd through Rust and writes the adapted generator as Safetensors.
+The application enters through the Cargo binary in `src/main.rs`. The engine reads the official nested checkpoint archives with Candle's Rust checkpoint reader and runs tensor math through LibTorch via tch. The tokenizer vocabulary is loaded with the Rust Tokenizers crate. Axum serves the embedded UI and rusqlite persists sessions. The same inference code powers both interactive and benchmark commands. Dialogue training uses LibTorch autograd through Rust and writes the adapted generator as Safetensors.
