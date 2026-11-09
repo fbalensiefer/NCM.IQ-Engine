@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NCM Chat</title>
+<link rel="stylesheet" href="/static/style.css">
+<script type="module" src="/static/app.js"></script>
+</head>
+<body>
+<header><div class="brand"><span aria-hidden="true" class="mark">◈</span> NCM Chat</div><span class="badge">Local inference</span></header>
+<main>
+  <section class="chat" aria-label="Conversation">
+    <div class="chat-head">
+      <div><p class="eyebrow">Next-Concept Modeling</p><h1 id="title">Research workspace</h1><p id="mode"></p></div>
+      <div class="actions"><button id="new" type="button" class="secondary">New session</button><button id="reset" type="button" class="secondary">Reset</button></div>
+    </div>
+    <div id="turns" class="turns" role="log" aria-live="polite"></div>
+    <form id="composer">
+      <label for="message" class="sr">Your message</label>
+      <textarea id="message" placeholder="Enter text…" rows="3" maxlength="30000" required></textarea>
+      <div class="composer-foot"><span id="status" role="status"></span><button id="send" type="submit">Generate</button></div>
+    </form>
+  </section>
+  <aside>
+    <section class="panel" aria-labelledby="settings">
+      <p class="eyebrow">Inference controls</p><h2 id="settings">Configuration</h2>
+      <label>Model <select id="model"></select></label>
+      <div class="grid">
+        <label>Hardware <select id="backend"></select></label>
+        <label>Profile <select id="profile"><option value="balanced">Balanced</option><option value="quality">Quality</option><option value="ultra">Ultra-light · experimental</option></select></label>
+        <label>Context tokens <input id="context" type="number" min="1" placeholder="Model default"></label>
+        <label>Prior turns <input id="history" type="number" min="0" max="24" value="8"></label>
+      </div>
+      <details><summary>Sampling controls</summary><div class="grid">
+        <label>Temperature <input id="temperature" type="number" min="0" max="10" step="0.05" placeholder="Default"></label>
+        <label>Top-k <input id="top_k" type="number" min="0" placeholder="Default"></label>
+        <label>Top-p <input id="top_p" type="number" min="0" max="1" step="0.01" placeholder="Default"></label>
+        <label>Guidance <input id="cfg_scale" type="number" min="0" max="8" step="0.1" placeholder="Default"></label>
+      </div></details>
+    </section>
+    <section class="panel" aria-labelledby="performance">
+      <p class="eyebrow">Last completed request</p><h2 id="performance">Performance</h2>
+      <p id="stats-empty">Generate a response to see measured timings.</p>
+      <dl id="stats"></dl>
+      <details id="detail" hidden><summary>Stage timings</summary><dl id="stages"></dl></details>
+    </section>
+  </aside>
+</main>
+</body>
+</html>
