@@ -31,8 +31,8 @@ Run from the repository root after building the release binary and downloading t
 ```sh
 backend=cpu
 for profile in quality balanced ultra; do
-  target/release/ncm-chat benchmark --backend "$backend" --profile "$profile" \
+  target/release/ncm-iq benchmark --backend "$backend" --profile "$profile" \
     --output "results/$backend-$profile.json"
 done
-target/release/ncm-chat compare "results/$backend-quality.json" "results/$backend-balanced.json"
+target/release/ncm-iq compare "results/$backend-quality.json" "results/$backend-balanced.json"
 ```

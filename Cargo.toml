@@ -1,10 +1,10 @@
 [package]
-name = "ncm-chat"
+name = "ncm-iq"
 version = "0.2.0"
 edition = "2024"
 rust-version = "1.99"
 license = "MIT"
-description = "Local Next-Concept Modeling inference and dialogue adaptation"
+description = "NCM.IQ — Local Next-Concept Modeling inference and dialogue adaptation"
 
 [dependencies]
 anyhow = "1"

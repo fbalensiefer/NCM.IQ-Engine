@@ -1,5 +1,5 @@
 use anyhow::Result;
-use ncm_chat::{
+use ncm_iq::{
     benchmark::PROMPTS,
     device::{Backend, Profile},
     download::digest,

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Exercise the Rust server with the locally trained badge-dialogue checkpoint.
 set -euo pipefail
-binary=${1:-target/release/ncm-chat}
+binary=${1:-target/release/ncm-iq}
 model=${2:-rust-badge-dialogue}
 temp=$(mktemp -d)
 server_pid=
@@ -17,14 +17,14 @@ trap cleanup EXIT
 server_pid=$!
 base=
 for ((attempt=0; attempt<100; attempt++)); do
-  base=$(sed -n 's/^NCM Chat listening on //p' "$temp/server.log" | head -1)
+  base=$(sed -n 's/^NCM\.IQ listening on //p' "$temp/server.log" | head -1)
   if [[ -n "$base" ]]; then break; fi
   if ! kill -0 "$server_pid" 2>/dev/null; then cat "$temp/server.log" >&2; exit 1; fi
   sleep 0.1
 done
 [[ -n "$base" ]]
 post() { curl -fsS -H 'Content-Type: application/json' -d "$2" "$base$1"; }
-curl -fsS "$base/" | grep -q 'NCM Chat'
+curl -fsS "$base/" | grep -Fq '<title>NCM.IQ</title>'
 curl -fsS "$base/static/app.js" > "$temp/app.js"
 curl -fsS "$base/api/config" | jq -e --arg model "$model" 'any(.models[]; .name == $model and .task == "dialogue")' >/dev/null
 

@@ -15,9 +15,9 @@ Start with the official XSum checkpoint in `artifacts/xsum`. Training writes a S
 ## Reproduce the smoke test
 
 ```sh
-target/release/ncm-chat train --backend cpu --train training/smoke.jsonl \
+target/release/ncm-iq train --backend cpu --train training/smoke.jsonl \
   --output artifacts/my-dialogue --steps 240 --learning-rate 0.002
-bash scripts/smoke-http.sh target/release/ncm-chat my-dialogue
+bash scripts/smoke-http.sh target/release/ncm-iq my-dialogue
 ```
 
 The heads-only run used four examples from two conversations and seed 2026. Reported concept loss fell from 2.4709 on the first step to 0.4158 on the last. The HTTP test sent the first generated reply as context for the second request, then checked persistence, stale revision rejection, and reset.

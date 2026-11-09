@@ -36,7 +36,7 @@ function updateSession(value) {
   }
   const task = config.models.find((item) => item.name === session.model).task;
   for (const item of session.turns) {
-    for (const [kind, label] of [["user", "You"], ["assistant", task === "xsum" ? "Summary" : "NCM"]]) {
+    for (const [kind, label] of [["user", "You"], ["assistant", task === "xsum" ? "Summary" : "NCM.IQ"]]) {
       const bubble = document.createElement("article");
       const title = document.createElement("small");
       bubble.className = "message " + kind;
@@ -177,7 +177,7 @@ run(async () => {
   for (const item of config.models) model.add(new Option(item.name, item.name));
   for (const backend of config.backends) byId("backend").add(new Option(backend.toUpperCase(), backend));
   if (!config.models.length) {
-    status.textContent = "No checkpoint found. Run ncm-chat download, then restart the server.";
+    status.textContent = "No checkpoint found. Run ncm-iq download, then restart the server.";
     return;
   }
   const last = localStorage.getItem("ncm-model");

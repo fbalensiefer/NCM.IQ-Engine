@@ -1,6 +1,6 @@
 # Local HTTP API
 
-`ncm-chat serve` binds to `127.0.0.1:8000` by default. Sessions are stored in the configured SQLite database. A session is tied to its selected model.
+`ncm-iq serve` binds to `127.0.0.1:8000` by default. Sessions are stored in the configured SQLite database. A session is tied to its selected model.
 
 | Method | Path | Request |
 |---|---|---|

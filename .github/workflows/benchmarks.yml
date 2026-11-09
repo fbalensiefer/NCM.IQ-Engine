@@ -1,4 +1,4 @@
-name: Rust checkpoint benchmarks
+name: NCM.IQ checkpoint benchmarks
 on:
   workflow_dispatch:
     inputs:
@@ -34,16 +34,16 @@ jobs:
           sdk=$(bash scripts/libtorch.sh)
           echo "LIBTORCH=$sdk" >> "$GITHUB_ENV"
       - run: cargo +1.99.1 build --release --locked
-      - run: target/release/ncm-chat download
+      - run: target/release/ncm-iq download
       - run: cargo +1.99.1 test --release --locked --test official -- --ignored
       - name: Measure three profiles
         run: |
           for profile in quality balanced ultra; do
-            target/release/ncm-chat benchmark --backend "$NCM_DEVICE" --profile "$profile" --runs "$NCM_RUNS" --output "results/$profile.json"
+            target/release/ncm-iq benchmark --backend "$NCM_DEVICE" --profile "$profile" --runs "$NCM_RUNS" --output "results/$profile.json"
           done
-          target/release/ncm-chat compare results/quality.json results/balanced.json
-          target/release/ncm-chat compare results/quality.json results/ultra.json
+          target/release/ncm-iq compare results/quality.json results/balanced.json
+          target/release/ncm-iq compare results/quality.json results/ultra.json
       - uses: actions/upload-artifact@v4
         with:
-          name: ncm-rust-benchmark-${{ inputs.device }}
+          name: ncm-iq-benchmark-${{ inputs.device }}
           path: results

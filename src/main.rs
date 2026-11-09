@@ -1,6 +1,6 @@
 use anyhow::{Result, ensure};
 use clap::{Args, Parser, Subcommand};
-use ncm_chat::{
+use ncm_iq::{
     benchmark,
     device::{Backend, Profile},
     download,

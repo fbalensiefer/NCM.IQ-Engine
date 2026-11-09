@@ -59,7 +59,7 @@ impl ApiError {
         )
     }
     fn internal(error: impl std::fmt::Display) -> Self {
-        eprintln!("NCM request failed: {error}");
+        eprintln!("NCM.IQ request failed: {error}");
         Self(
             StatusCode::SERVICE_UNAVAILABLE,
             "Request failed. Check the server log.".into(),
@@ -262,7 +262,7 @@ pub async fn serve(
         .layer(DefaultBodyLimit::max(256 * 1024))
         .with_state(state);
     let listener = tokio::net::TcpListener::bind((Ipv4Addr::LOCALHOST, port)).await?;
-    eprintln!("NCM Chat listening on http://{}", listener.local_addr()?);
+    eprintln!("NCM.IQ listening on http://{}", listener.local_addr()?);
     axum::serve(listener, router).await?;
     Ok(())
 }
